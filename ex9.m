@@ -39,3 +39,38 @@ test = datasample(boston,169,1);
 
 trainy = train(:, 14);
 trainx = train(:,1:13);
+
+one = ones(length(trainx), 1);
+trainarray = [];
+warray = [];
+for i = 1:20
+    setarray = [];
+    for j = 1:13
+        set = horzcat(trainx(:,j), one);
+        w = set \ trainy;
+        msetrain = mse(set, trainy, w);
+        setarray = [setarray, msetrain];
+        warray = [warray, w];
+    end
+    trainarray = [trainarray; setarray];
+end
+trainerror = mean(trainarray)
+
+testy = test(:, 14);
+testx = test(:,1:13);
+
+one = ones(length(testx), 1);
+testarray = [];
+
+for i = 1:20
+    setarray = [];
+    for j = 1:13
+        set = horzcat(testx(:,j), one);
+        msetest = mse(set, testy, warray(:,j));
+        setarray = [setarray, msetest];
+    end
+    testarray = [testarray; setarray];
+end
+testerror = mean(testarray)
+
+%% part 3

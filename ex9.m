@@ -74,3 +74,33 @@ end
 testerror = mean(testarray)
 
 %% part 3
+
+train = datasample(boston,337,1);
+test = datasample(boston,169,1);
+
+trainy = train(:, 14);
+trainx = train(:,1:13);
+
+one = ones(length(trainx), 1);
+trainarray = [];
+w = 0;
+for i = 1:20
+    set = horzcat(trainx, one);
+    w = set \ trainy;
+    msetrain = mse(set, trainy, w);
+    trainarray = [trainarray; msetrain];
+end
+trainerror = mean(trainarray)
+
+testy = test(:, 14);
+testx = test(:,1:13);
+
+one = ones(length(testx), 1);
+testarray = [];
+for i = 1:20
+    set = horzcat(testx, one);
+    msetest = mse(set, testy, w);
+    testarray = [testarray; msetest];
+end
+testerror = mean(testarray)
+

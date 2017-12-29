@@ -1,0 +1,15 @@
+function error = least_squares(Xtrain, Xtest, Ytrain, Ytest)
+
+% Add bias 
+Xtrain = [ones(size(Xtrain, 1),1) Xtrain];
+w = ((Xtrain' * Xtrain) \ Xtrain') * Y;
+
+Xtest = [ones(size(Xtest, 1),1) Xtest];
+
+Ypred = w' * Xtest
+
+% Discretize the prediction to 1 and -1
+Ypred = 2 * ((Ypred >= 0) - 0.5);
+
+error = calc_error(Ypred, Ytest)
+end

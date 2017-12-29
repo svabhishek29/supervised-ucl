@@ -1,0 +1,15 @@
+function error = perceptron(Xtrain, Xtest, Ytrain, Ytest)
+
+w = zeros(1, size(Xtrain, 2));
+M = 0;
+
+for t=1:size(Xtest, 1)
+    ypred = sign(w * Xtrain(t, :))
+    
+    if Ytrain(t) * ypred <= 0
+        w = w + Ytrain(t) * Xtrain(t, :)
+        M = M + 1
+    end
+end
+
+Ypred = sign(w * Xtest * w);

@@ -44,17 +44,8 @@ for s=1:length(sigmas)
             y_val = boston(validation(fold,:),end);
             
             alphastar = kridgereg(K_train_train,y_train,gamma);
-            cost = dualcost(K_val_train, y_val, alphastar)
+            cost = dualcost(K_val_train, y_val, alphastar);
             costarray = [costarray, cost];
-            
-            K_test_train = K_all(341:409, training(fold,:));
-            K_train_train = K_all(training(fold,:),training(fold,:));
-            
-            y_train = boston(training(fold,:),14);
-            y_test = boston(341:409,14);
-            
-            alphabest = kridgereg(K_train_train,y_train,gamma);
-            testerror = dualcost(K_test_train, y_test, alphabest)
         end
         meancost = mean(costarray);
         costmatrix(s,g) = meancost;
@@ -69,8 +60,6 @@ error = min(min(costmatrix));
 
 mingamma = gammas(col);
 minsigma = sigmas(row);
-% mingamma = gammas(end);
-% minsigma = sigmas(end);
 
 K_all_best = exp(-K_all_norm/(2*minsigma^2));
 K_test_train = K_all_best(341:end, 1:340);
@@ -82,22 +71,3 @@ y_test = boston(341:end,end);
 alphabest = kridgereg(K_train_train,y_train,mingamma);
 trainerror = dualcost(K_train_train, y_train, alphabest)
 testerror = dualcost(K_test_train, y_test, alphabest)
-
-% return
-
-% K_all_best = exp(-K_all_norm/(2*minsigma^2));
-% K_test_train = K_all_best(1:68, 69:340);
-% K_train_train = K_all_best(69:340,69:340);
-% 
-% y_train = boston(69:340,14);
-% y_test = boston(1:68,14);
-% 
-% alphabest = kridgereg(K_train_train,y_train,mingamma);
-% testerror = dualcost(K_test_train, y_test, alphabest)
-% 
-% return
-
-
-
-
-

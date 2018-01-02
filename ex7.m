@@ -89,10 +89,9 @@ gammatrainarray = [];
 gamma = 10.^[-6:3];
         
 for i = -6:3
-    msetrainarray = [];
-    msevalarray = [];
-
     for j = 1:200
+        msetrainarray = [];
+        msevalarray = [];
         nDim = 10;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
@@ -109,7 +108,7 @@ for i = -6:3
         for fold=1:folds
             setx = xitrain(training(fold,:),:);
             sety = yitrain(training(fold,:),:);
-            wstartrain = inv((setx'*setx)+(10.^i*length(setx)*eye))*(setx'*sety);
+            wstartrain = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
             mseval = mse(xitrain(validation(fold,:),:), yitrain(validation(fold,:),:), wstartrain);
             msevalarray = [msevalarray, mseval];
         end
@@ -132,7 +131,7 @@ for j = 1:200
 
     setx = xitrain(1:20,:);
     sety = yitrain(1:20,:);
-    wstarval = inv((setx'*setx)+(10.^i*length(setx)*eye))*(setx'*sety);
+    wstarval = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
 
     msetest = mse(xitest, yitest, wstarval);
 

@@ -44,7 +44,8 @@ for i = -6:3
     trainerrorarray = [trainerrorarray, mean(gammavalarray)]; 
     testerrorarray = [testerrorarray, mean(gammatestarray)];
 end
-
+trainerrorarray
+testerrorarray
 %%
 figure
 subplot(1,2,1)
@@ -94,7 +95,8 @@ for i = -6:3
     trainerrorarray = [trainerrorarray, mean(gammavalarray)]; 
     testerrorarray = [testerrorarray, mean(gammatestarray)];
 end
-
+trainerrorarray
+testerrorarray
 %%
 figure
 subplot(1,2,1)

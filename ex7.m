@@ -37,7 +37,7 @@ for j = 1:200
     msetrain = mse(xitest, yitest, wstar);
     msetestarray = [msetestarray, msetrain];
 end
-mean(msetestarray)
+testerror = mean(msetestarray)
 
 %% ex-5
 gammavalarray = [];
@@ -85,80 +85,56 @@ gammatestarrayerror = mean(msetestarray)
 
 %% ex-6
 
-gammavalarray = [];
+gammatrainarray = [];
 gamma = 10.^[-6:3];
         
 for i = -6:3
+    msetrainarray = [];
     msevalarray = [];
 
     for j = 1:200
         nDim = 10;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
+        D = length(xitrain);
+        folds = 5;
+
+        validation = [];
+        training = [];
+
+        for i=1:folds
+            validation = [validation ; ((D/folds)*(i-1)+1:(D/folds)*i)];
+            training = [training ; mod(((D/folds)*i+1 -1 : (D/folds)*(i+folds-1) - 1), D)+1];
+        end
+        for fold=1:folds
+            setx = xitrain(training(fold,:),:);
+            sety = yitrain(training(fold,:),:);
+            wstartrain = inv((setx'*setx)+(10.^i*length(setx)*eye))*(setx'*sety);
+            mseval = mse(xitrain(validation(fold,:),:), yitrain(validation(fold,:),:), wstartrain);
+            msevalarray = [msevalarray, mseval];
+        end
         
-        valsetx = xitrain(1:20,:);
-        valsety = yitrain(1:20,:);
-        wstarval1 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-        
-        valsetx = xitrain(21:40,:);
-        valsety = yitrain(21:40,:);
-        wstarval2 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-        
-        valsetx = xitrain(41:60,:);
-        valsety = yitrain(41:60,:);
-        wstarval3 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-        
-        valsetx = xitrain(61:80,:);
-        valsety = yitrain(61:80,:);
-        wstarval4 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-        
-        valsetx = xitrain(81:100,:);
-        valsety = yitrain(81:100,:);
-        wstarval5 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-        
-        meanwstar = (wstarval1 + wstarval2 + wstarval3 + wstarval4 + wstarval5) / 5;
-        
-        mseval = mse(valsetx, valsety, meanwstar);
-        
-        msevalarray = [msevalarray, mseval];
+        msetrainarray = [msetrainarray, mean(msevalarray)];
         
     end
-    gammavalarray = [gammavalarray, mean(msevalarray)];
+    gammatrainarray = [gammatrainarray, mean(msetrainarray)];
 end
-gammavalarray
+gammatrainarray
 
 %%
 msetestarray = [];
-[v, i] = min(gammavalarray);
+[v, i] = min(gammatrainarray);
 
 for j = 1:200
     nDim = 10;
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    valsetx = xitrain(1:20,:);
-    valsety = yitrain(1:20,:);
-    wstarval1 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
+    setx = xitrain(1:20,:);
+    sety = yitrain(1:20,:);
+    wstarval = inv((setx'*setx)+(10.^i*length(setx)*eye))*(setx'*sety);
 
-    valsetx = xitrain(21:40,:);
-    valsety = yitrain(21:40,:);
-    wstarval2 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-
-    valsetx = xitrain(41:60,:);
-    valsety = yitrain(41:60,:);
-    wstarval3 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-
-    valsetx = xitrain(61:80,:);
-    valsety = yitrain(61:80,:);
-    wstarval4 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-
-    valsetx = xitrain(81:100,:);
-    valsety = yitrain(81:100,:);
-    wstarval5 = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
-
-    meanwstar = (wstarval1 + wstarval2 + wstarval3 + wstarval4 + wstarval5) / 5;
-
-    msetest = mse(xitest, yitest, meanwstar);
+    msetest = mse(xitest, yitest, wstarval);
 
     msetestarray = [msetestarray, msetest];
 

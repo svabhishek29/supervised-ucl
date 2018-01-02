@@ -15,7 +15,7 @@ for i = -6:3
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-        wstar = inv((xitrain'*xitrain)+(10.^i*length(xitrain)*eye))*(xitrain'*yitrain);
+        wstar = inv((xitrain'*xitrain)+(10.^i*nDim*eye(nDim)))*(xitrain'*yitrain);
         msetrain = mse(xitrain, yitrain, wstar);
         msetrainarray = [msetrainarray, msetrain];
     end
@@ -33,7 +33,7 @@ for j = 1:200
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    wstar = inv((xitrain'*xitrain)+(mingamma*length(xitrain)*eye))*(xitrain'*yitrain);
+    wstar = inv((xitrain'*xitrain)+(mingamma*nDim*eye(nDim)))*(xitrain'*yitrain);
     msetrain = mse(xitest, yitest, wstar);
     msetestarray = [msetestarray, msetrain];
 end
@@ -54,7 +54,7 @@ for i = -6:3
         valsetx = xitrain(1:20,:);
         valsety = yitrain(1:20,:);
         
-        wstarval = inv((valsetx'*valsetx)+(10.^i*length(valsetx)*eye))*(valsetx'*valsety);
+        wstarval = inv((valsetx'*valsetx)+(10.^i*nDim*eye(nDim)))*(valsetx'*valsety);
         
         mseval = mse(valsetx, valsety, wstarval);
         
@@ -74,7 +74,7 @@ for j = 1:200
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    wstarval = inv((xitrain'*xitrain)+(gamma(i)*length(xitrain)*eye))*(xitrain'*yitrain);
+    wstarval = inv((xitrain'*xitrain)+(gamma(i)*nDim*eye(nDim)))*(xitrain'*yitrain);
 
     msetest = mse(xitest, yitest, wstarval);
 

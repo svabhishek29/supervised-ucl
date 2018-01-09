@@ -1,6 +1,4 @@
-function [ mse ] = mse( x, y, w )
-%MSE Summary of this function goes here
-%   Detailed explanation goes here
-mse = (1/length(x))*sum(((x*w) - y).^2);
+function [ mse ] = mse( X, Y, w )
+mse = (w' * X' * X * w - 2 * Y' * X * w + Y' * Y) / size(X,1);
 end
 

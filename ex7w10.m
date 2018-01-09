@@ -21,7 +21,8 @@ for i = 1:10
     end
     gammatrainarray = [gammatrainarray, mean(msetrainarray)];
 end
-gammatrainarray
+mean_ex4 = mean(gammatrainarray);
+std_ex4 = std(gammatrainarray);
 
 %% take the lowes training error and fing the gamma that gave that error and find the test error with that
 [v, i] = min(gammatrainarray);
@@ -37,7 +38,7 @@ for j = 1:200
     msetrain = mse(xitest10, yitest10, wstar);
     msetestarray = [msetestarray, msetrain];
 end
-testerror = mean(msetestarray)
+testerror_ex4 = mean(msetestarray);
 
 %% ex-5 - calculate the validation error and find the minimum
 gammavalarray = [];
@@ -65,7 +66,8 @@ for i = 1:10
     end
     gammavalarray = [gammavalarray, mean(msevalarray)];
 end
-gammavalarray
+mean_ex5 = mean(gammavalarray);
+std_ex5 = std(gammavalarray);
 
 %% using the minimum vaildation error find the gamma and use that to find the test error
 msetestarray = [];
@@ -89,7 +91,7 @@ for j = 1:200
     msetestarray = [msetestarray, msetest];
 
 end
-gammatestarrayerror = mean(msetestarray)
+testerror_ex5 = mean(msetestarray);
 
 %% ex-6 - using cross validation to find the lowest validation score
 
@@ -126,7 +128,8 @@ for i = -6:3
     end
     gammatrainarray = [gammatrainarray, mean(msetrainarray)];
 end
-gammatrainarray
+mean_ex6 = mean(gammatrainarray);
+std_ex6 = std(gammatrainarray);
 
 %% use the lowest validation score to find the gamma, with it find the test error
 msetestarray = [];
@@ -146,4 +149,13 @@ for j = 1:200
     msetestarray = [msetestarray, msetest];
 
 end
-gammatestarrayerror = mean(msetestarray)
+testerror_ex6 = mean(msetestarray);
+
+%% plot the data on the output
+col_1 = [mean_ex4; std_ex4; testerror_ex4];
+col_2 = [mean_ex5; std_ex5; testerror_ex5];
+col_3 = [mean_ex6; std_ex6; testerror_ex6];
+f = figure;
+t = uitable(f, 'Data', [col_1 col_2 col_3], 'Position', [20 20 500 300]);
+t.ColumnName = {'Ex4', 'Ex5', 'Ex6'};
+t.RowName = {'Mean Train Error', 'Std train error', 'Mean test error'};

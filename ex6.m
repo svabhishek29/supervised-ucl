@@ -1,19 +1,22 @@
-%%
+%% clear all the variables and initiate a seed for the calculations 
 clear
 clear all
 clc
 seed = initialize();
 
-%%
+%% for the entire gamma range perform 5 fold cross validation and get the average train test and validation errors for 100 data points
 gammatestarray = [];
 gammavalarray = [];
+gammatrainarray = [];
 trainerrorarray = [];
 testerrorarray = [];
+validationerror = [];
 gamma = 10.^[-6:3];
         
-for i = -6:3
+for i = 1:10
     msetestarray = [];
     msevalarray = [];
+    msetrainarray = [];
     for j = 1:200
         nDim = 10;
         nData = 600;
@@ -29,37 +32,51 @@ for i = -6:3
             validation = [validation ; ((D/folds)*(i-1)+1:(D/folds)*i)];
             training = [training ; mod(((D/folds)*i+1 -1 : (D/folds)*(i+folds-1) - 1), D)+1];
         end
+        
         for fold=1:folds
             setx = xitrain(training(fold,:),:);
             sety = yitrain(training(fold,:),:);
-            wstartrain = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
+            wstartrain = wreg(setx, sety, gamma(i));
             mseval = mse(xitrain(validation(fold,:),:), yitrain(validation(fold,:),:), wstartrain);
             msevalarray = [msevalarray, mseval];
+            trainerror = mse(setx, sety, wstartrain);
+            msetrainarray = [msetrainarray, trainerror];
             testerror = mse(xitest, yitest, wstartrain);
             msetestarray = [msetestarray, testerror];
         end
         gammavalarray = [gammavalarray, mean(msevalarray)];
+        gammatrainarray = [gammatrainarray, mean(msetrainarray)];
         gammatestarray = [gammatestarray, mean(msetestarray)];
+        
     end
-    trainerrorarray = [trainerrorarray, mean(gammavalarray)]; 
+    trainerrorarray = [trainerrorarray, mean(gammatrainarray)]; 
     testerrorarray = [testerrorarray, mean(gammatestarray)];
+    validationerror = [validationerror, mean(gammavalarray)];
 end
-trainerrorarray
-testerrorarray
-%%
-figure
-subplot(1,2,1)
-loglog(gamma,trainerrorarray,'-s')
-grid on
-subplot(1,2,2)
-loglog(gamma,testerrorarray,'-s')
-grid on
 
-%%
+col_1 = trainerrorarray';
+col_2 = validationerror';
+col_3 = testerrorarray';
+%% plot the numbers in coloums
+f = figure;
+t = uitable(f, 'Data', [col_1 col_2 col_3]);
+t.ColumnName = {'Training Error', 'Val Error', 'Test Error'};
+
+%% plot the figure
+figure
+loglog(gamma,trainerrorarray,'-s')
+hold on
+loglog(gamma,testerrorarray,'-s')
+hold on
+loglog(gamma,validationerror,'-s')
+hold on
+
+%% for the entire gamma range perform 5 fold cross validation and get the average train test and validation errors for 10 data points
 gammatestarray = [];
 gammavalarray = [];
 trainerrorarray = [];
 testerrorarray = [];
+validationerror = [];
 gamma = 10.^[-6:3];
         
 for i = -6:3
@@ -83,25 +100,36 @@ for i = -6:3
         for fold=1:folds
             setx = xitrain10(training(fold,:),:);
             sety = yitrain10(training(fold,:),:);
-            wstartrain = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
+            wstartrain = wreg(setx, sety, gamma(i));
             mseval = mse(xitrain10(validation(fold,:),:), yitrain10(validation(fold,:),:), wstartrain);
             msevalarray = [msevalarray, mseval];
+            trainerror = mse(setx, sety, wstartrain);
+            msetrainarray = [msetrainarray, trainerror];
             testerror = mse(xitest10, yitest10, wstartrain);
             msetestarray = [msetestarray, testerror];
         end
         gammavalarray = [gammavalarray, mean(msevalarray)];
+        gammatrainarray = [gammatrainarray, mean(msetrainarray)];
         gammatestarray = [gammatestarray, mean(msetestarray)];
+        
     end
-    trainerrorarray = [trainerrorarray, mean(gammavalarray)]; 
+    trainerrorarray = [trainerrorarray, mean(gammatrainarray)]; 
     testerrorarray = [testerrorarray, mean(gammatestarray)];
+    validationerror = [validationerror, mean(gammavalarray)];
 end
-trainerrorarray
-testerrorarray
-%%
+
+col_1 = trainerrorarray';
+col_2 = validationerror';
+col_3 = testerrorarray';
+%% plot the numbers in coloums
+f = figure;
+t = uitable(f, 'Data', [col_1 col_2 col_3]);
+t.ColumnName = {'Training Error', 'Val Error', 'Test Error'};
+%% plot the figure
 figure
-subplot(1,2,1)
 loglog(gamma,trainerrorarray,'-s')
-grid on
-subplot(1,2,2)
+hold on
 loglog(gamma,testerrorarray,'-s')
-grid on
+hold on
+loglog(gamma,validationerror,'-s')
+hold on

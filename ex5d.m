@@ -16,7 +16,7 @@ for i = 1:10
     msevalarray = [];
 
     for j = 1:200
-        nDim = 10;
+        nDim = 1;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
         
@@ -56,7 +56,7 @@ msetestarray = [];
 [v, i] = min(gammavalarray);
 
 for j = 1:200
-    nDim = 10;
+    nDim = 1;
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
@@ -81,7 +81,7 @@ for i = 1:10
     msevalarray = [];
 
     for j = 1:200
-        nDim = 10;
+        nDim = 1;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
         
@@ -121,7 +121,7 @@ msetestarray = [];
 [v, i] = min(gammavalarray);
 
 for j = 1:200
-    nDim = 10;
+    nDim = 1;
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 

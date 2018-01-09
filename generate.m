@@ -10,18 +10,18 @@ if (nDim == 1)
     xitrain = xi(1:100);
     xitest = xi(101:end);
     xitrain10 = xi(1:10);
-    xitest10 = xi(11:end);
+    xitest10 = xi(101:end);
 else
     xitrain = xi(1:100,:);
     xitest = xi(101:end,:);
     xitrain10 = xi(1:10, :);
-    xitest10 = xi(11:end, :);
+    xitest10 = xi(101:end, :);
 end
 
 yitrain = yi(1:100);
 yitest = yi(101:end);
 
 yitrain10 = yi(1:10);
-yitest10 = yi(11:end);
+yitest10 = yi(101:end);
 end
 

@@ -108,7 +108,7 @@ col_3 = gammatrain10array';
 col_4 = gammatest10array';
 
 f = figure;
-t = uitable(f, 'Data', [col_1 col_2 col_3 col_4], 'Position', [20 20 760 800]);
+t = uitable(f, 'Data', [col_1 col_2 col_3 col_4]);
 t.ColumnName = {'Training Error', 'Test Error', 'Training Error 10 pts', 'Test Error 10 pts'};
 %% plot the mes of the taining and test errors on a log scale for ease of comparison
 figure

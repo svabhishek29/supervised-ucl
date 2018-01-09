@@ -4,7 +4,7 @@ clear all
 clc
 seed = initialize();
 
-%%
+%% for every 200 iterations iterate over the gamma range and find the validation error, then use that that find the index of the gamma that gave the least validation error
 gamma_min_iter_small = zeros(200:1);
 gamma_min_iter_big = zeros(200:1);
 gamma = 10.^[-6:3];
@@ -44,5 +44,6 @@ for iter=1:200
     gamma_min_iter_big(iter) = 10^(min_index_big - 7);
 end
 
+%% average over the mean values for the 100 and 10 data points gamma values
 gamma_min_small_mean = mean(gamma_min_iter_small)
 gamma_min_small_big = mean(gamma_min_iter_big)

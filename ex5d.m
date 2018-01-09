@@ -4,7 +4,7 @@ clear all
 clc
 seed = initialize();
 
-%%
+%% for entire gamma range repeate the ridge regression 200 times and average the validation, train, test errors for 100 datapoints
 gammatrainarray = [];
 gammatestarray = [];
 gammavalarray = [];
@@ -42,7 +42,7 @@ for i = 1:10
 end
 gammavalarray
 
-%%
+%% plot the figures
 figure
 loglog(gamma,gammatrainarray,'-s')
 hold on
@@ -51,7 +51,7 @@ hold on
 loglog(gamma,gammavalarray,'-s')
 hold on
 
-%%        
+%% by taking the minimum of the validation error from the previous step we get the gamma index and use that to find the test error
 msetestarray = [];
 [v, i] = min(gammavalarray);
 
@@ -69,7 +69,7 @@ for j = 1:200
 end
 gammatestarrayerror = mean(msetestarray)
 
-%%
+%% for entire gamma range repeate the ridge regression 200 times and average the validation, train, test errors for 10 datapoints
 gammatrainarray = [];
 gammatestarray = [];
 gammavalarray = [];
@@ -107,7 +107,7 @@ for i = 1:10
 end
 gammavalarray
 
-%%
+%% plot the figures
 figure
 loglog(gamma,gammatrainarray,'-s')
 hold on
@@ -116,7 +116,7 @@ hold on
 loglog(gamma,gammavalarray,'-s')
 hold on
 
-%%        
+%% by taking the minimum of the validation error from the previous step we get the gamma index and use that to find the test error        
 msetestarray = [];
 [v, i] = min(gammavalarray);
 

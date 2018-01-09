@@ -29,8 +29,11 @@ for i = 1:20
     test_error = bostonmse(prediction_test, testy);
     testerrorarray = [testerrorarray, test_error];
 end
-trainerror = mean(trainerrorarray)
-testerror = mean(testerrorarray)
+trainerror_naive = mean(trainerrorarray);
+testerror_naive = mean(testerrorarray);
+
+std_train_naive = std(trainerrorarray);
+std_test_naive = std(testerrorarray);
 
 %% part 2
 trainarray = [];
@@ -53,7 +56,8 @@ for i = 1:20
     end
     trainarray = [trainarray; setarray];
 end
-trainerror = mean(trainarray)
+trainerror_attr = mean(trainarray);
+train_std_attr = std(trainarray);
 
 testy = test(:, 14);
 testx = test(:,1:13);
@@ -70,7 +74,9 @@ for i = 1:20
     end
     testarray = [testarray; setarray];
 end
-testerror = mean(testarray)
+testerror_attr = mean(testarray);
+test_error_std = std(testarray);
+
 
 %% part 3
 
@@ -89,7 +95,8 @@ for i = 1:20
     msetrain = mse(set, trainy, w);
     trainarray = [trainarray; msetrain];
 end
-trainerror = mean(trainarray)
+trainerror_all = mean(trainarray);
+trainerror_all_std = std(trainarray);
 
 testy = test(:, 14);
 testx = test(:,1:13);
@@ -101,5 +108,18 @@ for i = 1:20
     msetest = mse(set, testy, w);
     testarray = [testarray; msetest];
 end
-testerror = mean(testarray)
+testerror_all = mean(testarray);
+testerror_all_std = std(testarray);
 
+%% plot the values on a figure
+
+col_1 = [trainerror_naive; trainerror_attr'; trainerror_all];
+col_2 = [std_train_naive; train_std_attr'; trainerror_all_std];
+
+col_3 = [testerror_naive; testerror_attr'; testerror_all];
+col_4 = [std_test_naive; test_error_std'; testerror_all_std];
+
+f = figure;
+t = uitable(f, 'Data', [col_1 col_2 col_3 col_4], 'Position', [20 20 900 900]);
+t.ColumnName = {'train errror', '+/-std', 'test error', '+/-std'};
+t.RowName = {'Naive Regression', 'attribute 1', 'attribute 2', 'attribute 3', 'attribute 4', 'attribute 5', 'attribute 6', 'attribute 7', 'attribute 8', 'attribute 9', 'attribute 10', 'attribute 11', 'attribute 12', 'attribute 13', 'attribute all'};

@@ -1,29 +1,29 @@
-%%
+%% clear all the variables and initiate a seed for the calculations 
 clear
 clear all
 clc
 seed = initialize();
 
-%% ex-4
+%% ex-4 - reduce the training error
 gammatrainarray = [];
 gamma = 10.^[-6:3];
         
-for i = -6:3
+for i = 1:10
     msetrainarray = [];
     for j = 1:200
         nDim = 10;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-        wstar = inv((xitrain'*xitrain)+(10.^i*nDim*eye(nDim)))*(xitrain'*yitrain);
-        msetrain = mse(xitrain, yitrain, wstar);
+        wstar = wreg(xitrain10, yitrain10, gamma(i));
+        msetrain = mse(xitrain10, yitrain10, wstar);
         msetrainarray = [msetrainarray, msetrain];
     end
     gammatrainarray = [gammatrainarray, mean(msetrainarray)];
 end
 gammatrainarray
 
-%%
+%% take the lowes training error and fing the gamma that gave that error and find the test error with that
 [v, i] = min(gammatrainarray);
 mingamma = gamma(i);
 
@@ -33,17 +33,17 @@ for j = 1:200
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    wstar = inv((xitrain'*xitrain)+(mingamma*nDim*eye(nDim)))*(xitrain'*yitrain);
-    msetrain = mse(xitest, yitest, wstar);
+    wstar = wreg(xitrain10, yitrain10, mingamma);
+    msetrain = mse(xitest10, yitest10, wstar);
     msetestarray = [msetestarray, msetrain];
 end
 testerror = mean(msetestarray)
 
-%% ex-5
+%% ex-5 - calculate the validation error and find the minimum
 gammavalarray = [];
 gamma = 10.^[-6:3];
         
-for i = -6:3
+for i = 1:10
     msevalarray = [];
 
     for j = 1:200
@@ -51,10 +51,12 @@ for i = -6:3
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
         
-        valsetx = xitrain(1:20,:);
-        valsety = yitrain(1:20,:);
+        valsetx = xitrain10(1:2,:);
+        valsety = yitrain10(1:2,:);
+        trainsetx = xitrain10(3:end,:);
+        trainsety = yitrain10(3:end,:);
         
-        wstarval = inv((valsetx'*valsetx)+(10.^i*nDim*eye(nDim)))*(valsetx'*valsety);
+        wstarval = wreg(trainsetx, trainsety, gamma(i));
         
         mseval = mse(valsetx, valsety, wstarval);
         
@@ -65,25 +67,31 @@ for i = -6:3
 end
 gammavalarray
 
-%%
+%% using the minimum vaildation error find the gamma and use that to find the test error
 msetestarray = [];
 [v, i] = min(gammavalarray);
+mingamma = gamma(i);
 
 for j = 1:200
     nDim = 10;
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    wstarval = inv((xitrain'*xitrain)+(gamma(i)*nDim*eye(nDim)))*(xitrain'*yitrain);
+    valsetx = xitrain10(1:2,:);
+    valsety = yitrain10(1:2,:);
+    trainsetx = xitrain10(3:end,:);
+    trainsety = yitrain10(3:end,:);
+    
+    wstarval = wreg(trainsetx, trainsety, mingamma);
 
-    msetest = mse(xitest, yitest, wstarval);
+    msetest = mse(xitest10, yitest10, wstarval);
 
     msetestarray = [msetestarray, msetest];
 
 end
 gammatestarrayerror = mean(msetestarray)
 
-%% ex-6
+%% ex-6 - using cross validation to find the lowest validation score
 
 gammatrainarray = [];
 gamma = 10.^[-6:3];
@@ -95,7 +103,7 @@ for i = -6:3
         nDim = 10;
         nData = 600;
         [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
-        D = length(xitrain);
+        D = length(xitrain10);
         folds = 5;
 
         validation = [];
@@ -106,10 +114,10 @@ for i = -6:3
             training = [training ; mod(((D/folds)*i+1 -1 : (D/folds)*(i+folds-1) - 1), D)+1];
         end
         for fold=1:folds
-            setx = xitrain(training(fold,:),:);
-            sety = yitrain(training(fold,:),:);
-            wstartrain = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
-            mseval = mse(xitrain(validation(fold,:),:), yitrain(validation(fold,:),:), wstartrain);
+            setx = xitrain10(training(fold,:),:);
+            sety = yitrain10(training(fold,:),:);
+            wstartrain = wreg(setx, sety, gamma(i));
+            mseval = mse(xitrain10(validation(fold,:),:), yitrain10(validation(fold,:),:), wstartrain);
             msevalarray = [msevalarray, mseval];
         end
         
@@ -120,20 +128,20 @@ for i = -6:3
 end
 gammatrainarray
 
-%%
+%% use the lowest validation score to find the gamma, with it find the test error
 msetestarray = [];
 [v, i] = min(gammatrainarray);
-
+mingamma = gamma(i);
 for j = 1:200
     nDim = 10;
     nData = 600;
     [w, ni, xi, yi, xitrain, xitest, yitrain, yitest, xitrain10, xitest10, yitrain10, yitest10] = generate(nDim, nData);
 
-    setx = xitrain(1:20,:);
-    sety = yitrain(1:20,:);
-    wstarval = inv((setx'*setx)+(10.^i*nDim*eye(nDim)))*(setx'*sety);
+    setx = xitrain10;
+    sety = yitrain10;
+    wstarval = wreg(setx, sety, mingamma);
 
-    msetest = mse(xitest, yitest, wstarval);
+    msetest = mse(xitest10, yitest10, wstarval);
 
     msetestarray = [msetestarray, msetest];
 

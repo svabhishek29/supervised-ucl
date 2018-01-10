@@ -64,12 +64,13 @@ t.ColumnName = {'Training Error', 'Val Error', 'Test Error'};
 
 %% plot the figure
 figure
-loglog(gamma,trainerrorarray,'-s')
+loglog(gamma,trainerrorarray,'r-')
 hold on
-loglog(gamma,testerrorarray,'-s')
+loglog(gamma,testerrorarray,'b-')
 hold on
-loglog(gamma,validationerror,'-s')
+loglog(gamma,validationerror,'r--')
 hold on
+legend('train error','test error', 'validation error')
 
 %% for the entire gamma range perform 5 fold cross validation and get the average train test and validation errors for 10 data points
 gammatestarray = [];
@@ -127,9 +128,10 @@ t = uitable(f, 'Data', [col_1 col_2 col_3]);
 t.ColumnName = {'Training Error', 'Val Error', 'Test Error'};
 %% plot the figure
 figure
-loglog(gamma,trainerrorarray,'-s')
+loglog(gamma,trainerrorarray,'r-')
 hold on
-loglog(gamma,testerrorarray,'-s')
+loglog(gamma,testerrorarray,'b-')
 hold on
-loglog(gamma,validationerror,'-s')
+loglog(gamma,validationerror,'r--')
 hold on
+legend('train error','test error', 'validation error')

@@ -31,10 +31,11 @@ t.ColumnName = {'Training Error', 'Test Error'};
 
 %% plot the mes of the taining and test errors on a log scale for ease of comparison
 figure
-loglog(gamma,msetrainarray,'-s')
+loglog(gamma,msetrainarray,'r-')
 hold on
-loglog(gamma,msetestarray,'-s')
+loglog(gamma,msetestarray,'b-')
 hold on
+legend('train error','test error')
 
 %% calculate w for the 10 dim data and also find the train and test error over 10 training data points for different gamma values
 msetrainarray = [];
@@ -58,10 +59,11 @@ t = uitable(f, 'Data', [col_1 col_2]);
 t.ColumnName = {'Training Error', 'Test Error'};
 %% plot the mes of the taining and test errors on a log scale for ease of comparison
 figure
-loglog(gamma,msetrainarray,'-s')
+loglog(gamma,msetrainarray,'r-')
 hold on
-loglog(gamma,msetestarray,'-s')
+loglog(gamma,msetestarray,'b-')
 hold on
+legend('train error','test error')
 
 %% repeate the above process 200 times and average them
 gammatrainarray = [];
@@ -112,11 +114,12 @@ t = uitable(f, 'Data', [col_1 col_2 col_3 col_4], 'Position', [20 20 760 800]);
 t.ColumnName = {'Training Error', 'Test Error', 'Training Error 10 pts', 'Test Error 10 pts'};
 %% plot the mes of the taining and test errors on a log scale for ease of comparison
 figure
-loglog(gamma,gammatrainarray,'-s')
+loglog(gamma,gammatrainarray,'r-')
 hold on
-loglog(gamma,gammatestarray,'-s')
+loglog(gamma,gammatestarray,'b-')
 hold on
-loglog(gamma,gammatrain10array,'-s')
+loglog(gamma,gammatrain10array,'r--')
 hold on
-loglog(gamma,gammatest10array,'-s')
+loglog(gamma,gammatest10array,'b--')
 hold on
+legend('train error 100 points','test error 100 points', 'train error 10 points','test error 10 points')

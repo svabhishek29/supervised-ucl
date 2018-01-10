@@ -44,12 +44,13 @@ gammavalarray
 
 %% plot the figures
 figure
-loglog(gamma,gammatrainarray,'-s')
+loglog(gamma,gammatrainarray,'r-')
 hold on
-loglog(gamma,gammatestarray,'-s')
+loglog(gamma,gammatestarray,'b-')
 hold on
-loglog(gamma,gammavalarray,'-s')
+loglog(gamma,gammavalarray,'r--')
 hold on
+legend('train error','test error', 'validation error')
 
 %% by taking the minimum of the validation error from the previous step we get the gamma index and use that to find the test error
 msetestarray = [];
@@ -109,12 +110,13 @@ gammavalarray
 
 %% plot the figures
 figure
-loglog(gamma,gammatrainarray,'-s')
+loglog(gamma,gammatrainarray,'r-')
 hold on
-loglog(gamma,gammatestarray,'-s')
+loglog(gamma,gammatestarray,'b-')
 hold on
-loglog(gamma,gammavalarray,'-s')
+loglog(gamma,gammavalarray,'r--')
 hold on
+legend('train error','test error', 'validation error')
 
 %% by taking the minimum of the validation error from the previous step we get the gamma index and use that to find the test error
 msetestarray = [];
